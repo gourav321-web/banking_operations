@@ -3,7 +3,6 @@ require 'csv'
 
 class Main
   def initialize
-    @key=false
     @user={name:'', email:'', password:'', balance:0}
     check_file
   end
@@ -32,7 +31,7 @@ class Main
     end
     loop do
       print "Enter your Email : "
-      @email = gets.chomp
+      @email = gets.chomp.downcase
       if @email.empty?
         puts "please enter Email"
       else
@@ -67,14 +66,13 @@ class Main
     CSV.open("User.csv","a") do |users|
       users << @new_user.values
     end
-    @key = true
     puts "Registration successful."
   end
 
   def login
     loop do
       print "Enter your Email : "
-      @email=gets.chomp
+      @email=gets.chomp.downcase
       if @email.empty?
         puts "please enter Email"
       else
@@ -95,7 +93,6 @@ class Main
     CSV.foreach("User.csv",headers:true) do |row|
       if row["email"]==@email && row["password"]==@password
         found=true
-        @key=true
         @user[:name] = row["name"]
         @user[:email]=row["email"]
         @user[:password] = row["password"]
@@ -169,7 +166,6 @@ class Main
       return
     end
     @user[:email]=""
-    @key=false
     puts "User logged out successfully"
   end
 
